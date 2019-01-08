@@ -13,7 +13,7 @@ public class DbInitializer {
 
     private boolean initialized = false;
 
-    @Resource(lookup = "java:jboss/datasources/test_mysql")
+    @Resource(lookup = "java:jboss/datasources/MySQLDS")
     private DataSource dataSource;
 
     public boolean isInitialized() {
