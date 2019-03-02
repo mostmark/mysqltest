@@ -1,5 +1,7 @@
-package com.test;
+package com.test.boundary;
 
+import com.test.control.DbInitializer;
+import com.test.entity.EmpManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -17,11 +19,14 @@ import javax.sql.DataSource;
 @WebServlet(name = "TestServlet", urlPatterns = {"/TestServlet"})
 public class TestServlet extends HttpServlet {
 
-    @Resource(lookup = "java:jboss/datasources/MySQLDS")
-    private DataSource dataSource;
-
+    //@Resource(lookup = "java:jboss/datasources/MySQLDS")
+    //private DataSource dataSource;
+    
     @EJB
-    DbInitializer dbInitializer;
+    EmpManager empManager;
+
+    //@EJB
+    //DbInitializer dbInitializer;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,16 +34,18 @@ public class TestServlet extends HttpServlet {
         
         System.out.println("Received request from " + request.getRemoteAddr());
         
+        /*
         if(!dbInitializer.isInitialized()){
             System.out.println("================= INITIALIZING DB =================");
             dbInitializer.initializeDb();
         }
+        */
 
         PrintWriter out = response.getWriter();
         try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT ename, job FROM emp ORDER BY ename");
-            ResultSet resultSet = preparedStatement.executeQuery();
+            //Connection connection = dataSource.getConnection();
+            //PreparedStatement preparedStatement = connection.prepareStatement("SELECT ename, job FROM emp ORDER BY ename");
+            //ResultSet resultSet = preparedStatement.executeQuery();
 
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -46,7 +53,9 @@ public class TestServlet extends HttpServlet {
             out.println("<title>DB Servlet</title>");
             out.println("</head>");
             out.println("<body>");
+            out.println("Hello");
 
+            /*
             while (resultSet.next()) {
                 out.println("<p>" + resultSet.getString(1) + " - " + resultSet.getString(2) + "</p><br/>");
             }
@@ -54,7 +63,7 @@ public class TestServlet extends HttpServlet {
             resultSet.close();
             preparedStatement.close();
             connection.close();
-
+*/
             out.println("</body>");
             out.println("</html>");
         } catch (Exception e) {

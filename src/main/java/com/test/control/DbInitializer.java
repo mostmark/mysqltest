@@ -1,4 +1,4 @@
-package com.test;
+package com.test.control;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
