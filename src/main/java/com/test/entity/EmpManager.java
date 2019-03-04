@@ -1,13 +1,24 @@
 package com.test.entity;
 
 
+import com.test.control.DbInitializer;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
 public class EmpManager {
+    
+    @EJB
+    DbInitializer dbInitializer;
+    
+    @PostConstruct
+    public void postConstruct(){
+        dbInitializer.initializeDb();
+    }
 
     @PersistenceContext(name = "employees")
     EntityManager em;

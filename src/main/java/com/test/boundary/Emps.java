@@ -24,55 +24,54 @@ public class Emps {
     @EJB
     EmpManager empManager;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Emp> getEmps() {
-        return empManager.getAllEmps();
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Emp> findEmpsByName(@QueryParam("name") String name) {
-        return empManager.findEmpsByName(name);
+    public List<Emp> getEmps(@QueryParam("name") String name) {
+        if (name != null && name.length() > 0) {
+            return empManager.findEmpsByName(name);
+        } else {
+            return empManager.getAllEmps();
+        }
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Emp getEmp(@PathParam("id") int id) {
         return empManager.getEmp(id);
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject addEmp(JsonObject person){
+    public JsonObject addEmp(JsonObject person) {
 
         Emp emp = new Emp(person);
         empManager.addEmp(emp);
 
         return Json.createObjectBuilder().add("timestamp", new Date().toString()).add("result", "ok").build();
     }
-    
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject updateEmp(JsonObject person){
+    public JsonObject updateEmp(JsonObject person) {
 
         Emp emp = new Emp(person);
         empManager.updateEmp(emp);
 
         return Json.createObjectBuilder().add("timestamp", new Date().toString()).add("result", "ok").build();
     }
-    
+
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public JsonObject deleteEmp(@PathParam("id") int id){
+    public JsonObject deleteEmp(@PathParam("id") int id) {
 
         empManager.deleteEmp(id);
 
         return Json.createObjectBuilder().add("timestamp", new Date().toString()).add("result", "ok").build();
     }
-    
+
 }
