@@ -16,12 +16,12 @@ public class EmpManager {
     EntityManager em;
 
     public List<Emp> getAllEmps(){
-        return em.createQuery("SELECT e FROM Emp e", Emp.class).getResultList();
+        return em.createQuery("SELECT e FROM Emp e ORDER BY e.ename", Emp.class).getResultList();
     }
 
     public List<Emp> findEmpsByName(String name){
         return em.createQuery(
-                "SELECT e FROM Emp e WHERE e.ename LIKE :eName", Emp.class)
+                "SELECT e FROM Emp e WHERE e.ename LIKE :eName ORDER BY e.ename", Emp.class)
                 .setParameter("eName", name + "%")
                 .getResultList();
     }
