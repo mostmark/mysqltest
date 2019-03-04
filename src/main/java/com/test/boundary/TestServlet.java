@@ -1,51 +1,34 @@
 package com.test.boundary;
 
-import com.test.control.DbInitializer;
+import com.test.entity.Emp;
 import com.test.entity.EmpManager;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import javax.annotation.Resource;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 @WebServlet(name = "TestServlet", urlPatterns = {"/TestServlet"})
 public class TestServlet extends HttpServlet {
 
-    @Resource(lookup = "java:jboss/datasources/MySQLDS")
-    private DataSource dataSource;
-    
     @EJB
     EmpManager empManager;
-
-    @EJB
-    DbInitializer dbInitializer;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         System.out.println("Received request from " + request.getRemoteAddr());
-        
-        
-        if(!dbInitializer.isInitialized()){
-            System.out.println("================= INITIALIZING DB =================");
-            dbInitializer.initializeDb();
-        }
-        
 
         PrintWriter out = response.getWriter();
+
+        List<Emp> emps = empManager.getAllEmps();
+
         try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT ename, job FROM emp ORDER BY ename");
-            ResultSet resultSet = preparedStatement.executeQuery();
 
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -53,16 +36,18 @@ public class TestServlet extends HttpServlet {
             out.println("<title>DB Servlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("Hello");
 
-            
-            while (resultSet.next()) {
-                out.println("<p>" + resultSet.getString(1) + " - " + resultSet.getString(2) + "</p><br/>");
+            int i = 0;
+
+            if (emps != null) {
+                while (i < emps.size()) {
+                    Emp emp = emps.get(i);
+                    out.println("<p>" + emp.getEmpno() + " - " + emp.getEname() + " - " + emp.getSal() + "</p><br/>");
+                    i++;
+                }
+            } else {
+                out.println("No employees found!");
             }
-
-            resultSet.close();
-            preparedStatement.close();
-            connection.close();
 
             out.println("</body>");
             out.println("</html>");

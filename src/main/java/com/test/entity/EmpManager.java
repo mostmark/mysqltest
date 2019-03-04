@@ -11,14 +11,6 @@ import javax.persistence.PersistenceContext;
 
 @Stateless
 public class EmpManager {
-    
-    @EJB
-    DbInitializer dbInitializer;
-    
-    @PostConstruct
-    public void postConstruct(){
-        dbInitializer.initializeDb();
-    }
 
     @PersistenceContext(name = "employees")
     EntityManager em;

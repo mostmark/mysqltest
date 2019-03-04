@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.sql.DataSource;
 
+@Startup
 @Singleton
 public class DbInitializer {
 
@@ -15,6 +18,11 @@ public class DbInitializer {
 
     @Resource(lookup = "java:jboss/datasources/MySQLDS")
     private DataSource dataSource;
+    
+    @PostConstruct
+    public void postConstruct(){
+        initializeDb();
+    }
 
     public boolean isInitialized() {
         return initialized;
