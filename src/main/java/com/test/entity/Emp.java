@@ -49,7 +49,7 @@ public class Emp {
 
     public Emp(JsonObject input) {
         String hireDateStr;
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
         this.empno = input.getInt("empno");
         this.ename = input.getString("ename");
@@ -71,7 +71,7 @@ public class Emp {
     }
 
     public JsonObject toJson() {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         return Json.createObjectBuilder().add("empno", empno)
                 .add("ename", ename)
                 .add("job", job)
