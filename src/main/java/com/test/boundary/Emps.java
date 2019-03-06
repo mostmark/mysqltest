@@ -2,6 +2,7 @@ package com.test.boundary;
 
 import com.test.entity.Emp;
 import com.test.entity.EmpManager;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -24,22 +25,46 @@ public class Emps {
     @EJB
     EmpManager empManager;
 
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Emp> getEmps(@QueryParam("name") String name) {
+    public List<JsonObject> getEmps(@QueryParam("name") String name) {
+
+        List<JsonObject> employees = null;
+
         if (name != null && name.length() > 0) {
-            return empManager.findEmpsByName(name);
+            List<Emp> emps = empManager.findEmpsByName(name);
+            if (emps != null) {
+                employees = new ArrayList<JsonObject>(emps.size());
+                for (Emp emp : emps) {
+                    employees.add(emp.toJson());
+                }
+            }
+            return employees;
         } else {
-            return empManager.getAllEmps();
+            List<Emp> emps = empManager.getAllEmps();
+            if (emps != null) {
+                employees = new ArrayList<JsonObject>(emps.size());
+                for (Emp emp : emps) {
+                    employees.add(emp.toJson());
+                }
+            }
         }
+
+        return employees;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Emp getEmp(@PathParam("id") int id) {
-        return empManager.getEmp(id);
+    public JsonObject getEmp(@PathParam("id") int id) {
+
+        Emp emp = empManager.getEmp(id);
+
+        if (emp != null) {
+            return emp.toJson();
+        } else {
+            return null;
+        }
     }
 
     @POST
